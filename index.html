@@ -121,6 +121,90 @@
     function formatMilliseconds(milliseconds) {
       return milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
     }
+    
+    // Melacak jumlah pengunjung dari Local Storage
+
+    var visitorCount = localStorage.getItem('visitorCount') || 0;
+
+    visitorCountElement.textContent = "Total Visitors: " + visitorCount;
+
+    function startTimer() {
+
+      startTime = Date.now() - elapsedTime;
+
+      timerInterval = setInterval(updateTime, 10);
+
+      isRunning = true;
+
+    }
+
+    function updateTime() {
+
+      var currentTime = Date.now();
+
+      elapsedTime = currentTime - startTime;
+
+      var formattedTime = formatTime(elapsedTime);
+
+      time.textContent = formattedTime;
+
+    }
+
+    function formatTime(time) {
+
+      var hours = Math.floor(time / 3600000);
+
+      var minutes = Math.floor((time % 3600000) / 60000);
+
+      var seconds = Math.floor((time % 60000) / 1000);
+
+      var milliseconds = time % 1000;
+
+      var formattedTime = formatDigits(hours) + ":" + formatDigits(minutes) + ":" + formatDigits(seconds) + "." + formatMilliseconds(milliseconds);
+
+      return formattedTime;
+
+    }
+
+    function formatDigits(num) {
+
+      return num < 10 ? "0" + num : num;
+
+    }
+
+    function formatMilliseconds(milliseconds) {
+
+      return milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
+
+    }
+
+    startBtn.addEventListener("click", function() {
+
+      if (!isRunning) {
+
+        startTimer();
+
+        startBtn.disabled = true;
+
+      }
+
+    });
+
+    if (isRunning) {
+
+      startTimer();
+
+      startBtn.disabled = true;
+
+    }
+
+    // Menambahkan jumlah pengunjung saat website dibuka
+
+    visitorCount++;
+
+    localStorage.setItem('visitorCount', visitorCount);
+
+    visitorCountElement.textContent = "Total Visitors: " + visitorCount;
   </script>
 </body>
 </html>
