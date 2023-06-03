@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stopwatch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      transition: background-color 0.5s ease;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .timer {
+      font-size: 72px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      background: none;
+      border: none;
+    }
+
+    .description {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      max-width: 400px;
+      width: 80%;
+      text-align: center;
+    }
+
+    .toggle-button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 24px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .toggle-button-night {
+      background-color: #000000;
+    }
+
+    @media (max-width: 480px) {
+      .timer {
+        font-size: 48px;
+      }
+    }
+
+    .mode-siang {
+      background-color: #f2f2f2;
+    }
+
+    .mode-malam {
+      background-color: #000000;
+    }
+
+    .mode-siang .toggle-button {
+      background-color: #4CAF50;
+    }
+
+    .mode-malam .toggle-button {
+      background-color: #000000;
+    }
+
+    .mode-siang .timer {
+      color: #000000;
+    }
+
+    .mode-malam .timer {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="timer" id="timer">00:00:00</div>
+    <div class="description">
+      <p>Ini adalah waktu server berjalan, hubungi saya via <a href="https://t.me/akuniniterjual">Telegram</a> jika ingin menanyakan sesuatu.</p>
+    </div>
+    <div>
+      <button class="toggle-button" id="toggleButton" onclick="toggleMode()">Siang</button>
+    </div>
+  </div>
+
+  <script>
+    var timerInterval;
+    var startTime = parseInt(localStorage.getItem("startTime")) || Date.now();
+    var isNightMode = false;
+
+    function startTimer() {
+      timerInterval = setInterval(updateTimer, 1000); // Interval 1 detik
+    }
+
+    function updateTimer() {
+      var currentTime = Date.now();
+      var elapsedTime = currentTime - startTime;
+
+      var hours = Math.floor(elapsedTime / 3600000);
+      var minutes = Math.floor((elapsedTime % 3600000) / 60000);
+      var seconds = Math.floor((elapsedTime % 60000) / 1000);
+
+      document.getElementById("timer").textContent = formatTime(hours) + ":" + formatTime(minutes) + ":" + formatTime(seconds);
+    }
+
+    function formatTime(time) {
+      return time < 10 ? "0" + time : time;
+    }
+
+    // Simpan waktu mulai pada local storage
+    localStorage.setItem("startTime", startTime);
+
+    // Jalankan fungsi startTimer()
+    startTimer();
+
+    function toggleMode() {
+      isNightMode = !isNightMode;
+      var toggleButton = document.getElementById("toggleButton");
+      var timerElement = document.getElementById("timer");
+
+      if (isNightMode) {
+        document.body.classList.add("mode-malam");
+        document.body.classList.remove("mode-siang");
+        toggleButton.textContent = "Siang";
+        toggleButton.classList.remove("toggle-button-night");
+      } else {
+        document.body.classList.add("mode-siang");
+        document.body.classList.remove("mode-malam");
+        toggleButton.textContent = "Malam";
+        toggleButton.classList.add("toggle-button-night");
+      }
+
+      timerElement.classList.toggle("mode-malam", isNightMode);
+      timerElement.classList.toggle("mode-siang", !isNightMode);
+    }
+  </script>
+</body>
+</html>
